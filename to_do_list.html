@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+</head>
+<style>
+    .big-box{
+        width:600px;
+        height:auto;
+        margin:20px auto;
+    }
+    .add{
+        width:100%;
+        height:30px;
+        background:pink
+    }
+    .add input{
+        width:100%;
+        height:100%;
+        font-size: 14px;
+        padding-left:15px;
+        box-sizing: border-box;
+    }
+    .check-box{
+        width:100%;
+        height:30px;
+        margin-top:15px;
+        border-bottom: 1px solid #969696;
+    }
+    .check{
+        float:right;
+        height:15px;
+        font-size: 16px;
+        margin-right:15px;
+    }
+    .list-box{
+        width:100%;
+        height:auto;
+        margin-top:15px;
+    }
+    .list{
+        width:100%;
+        height:30px;
+        margin-bottom:15px;
+        border-bottom: 1px solid #969696;
+    }
+    .opt{
+        width:8px;
+        height:8px;
+        border-radius: 50%;
+        border:1px solid red;
+        float:left;
+        margin-top:6px;
+        margin-right:10px;
+        box-sizing: border-box;
+    }
+    .red{
+        background: red;
+    }
+    .del{
+        float:right;
+        margin-right:15px;
+    }
+</style>
+<body>
+   <div class="big-box" id="vue">
+       <div class="add">
+          <input type="text" placeholder="请输入事项" @keydown.13="add" v-model="text" v-focus="true">
+      </div>
+       <div class="check-box">
+           <div class="check">已完成</div>
+           <div class="check">未完成</div>
+           <div class="check">全部</div>
+       </div>
+       <div class="list-box">
+           <div class="list" v-show="all.length>0" v-for="item in all">
+               <div v-if="item.edit" @dblclick="changeCon(item,item.edit)">
+                   <span class="opt" @click="change(item,item.state)" v-bind:class="{red:item.state==1}"></span>
+                   <span class="con">{{ item.con }}</span>
+                   <span class="del" @click="del(item.id)">删除</span>
+               </div>
+               <div v-else>
+                   <input type="text" v-model="item.con" @blur="changeCon(item,item.edit)">
+               </div>
+           </div>
+           <div class="list" v-show="all.length==0">没有数据</div>
+       </div>
+   </div>
+</body>
+</html>
+<script>
+    /*自定义指令 页面打开自动聚焦*/
+    Vue.directive('focus',{
+        inserted:function(el,val){
+            el.focus();
+        }
+    });
+    var vm=new Vue({
+        el:"#vue",
+        data:{
+            all:[],
+            text:"",
+        },
+        methods:{
+            add(){
+                var obj={};
+                obj.id=1000*Math.random()+new Date().getTime();
+                obj.con=this.text;
+                obj.edit=true;
+                obj.state=0;
+                this.all.push(obj);
+                this.text='';
+            },
+            del(id){
+               this.all=this.all.filter(function(e){
+                   return e.id!=id;
+               })
+            },
+            change(item,state){
+                if(state==0){
+                    item.state=1;
+                }else{
+                    item.state=0;
+                }
+            },
+            changeCon(item,edit){
+                console.log(edit)
+                item.edit=!edit;
+            }
+
+        }
+    })
+</script>

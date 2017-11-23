@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+</head>
+<style>
+    .botton{
+        width:50px;
+        padding:5px;
+        background: #fff;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 0 0 5px #ccc;
+        cursor: default;
+        display: inline-block;
+    }
+    .red{
+        background: blue;
+    }
+</style>
+<body>
+ <div class="vue">
+    <mybotton name="按钮"></mybotton>
+    <mybotton name="上传"></mybotton>
+    <mybotton name="提交"></mybotton>
+    <mybotton name="删除"></mybotton>
+ </div>
+</body>
+</html>
+<script>
+     Vue.component('mybotton',{
+         props:["name"],
+         template:"<div class='botton' @click='change(red)' :class='{red,red}'>{{this.name}}</div>",
+         data:function(){
+             return {
+                 red: false
+           }
+         },
+         methods:{
+             change(red){
+                this.red=!red;
+             }
+         }
+     })
+     var vm=new Vue({
+         el:".vue",
+
+     })
+</script>
